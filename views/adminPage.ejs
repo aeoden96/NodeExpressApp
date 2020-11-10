@@ -1,0 +1,60 @@
+
+
+<h2>ADMIN PAGE</h2> <h3>Admin: <%=currentUser['name'] %>  </h3> 
+
+<form action="/logout?_method=DELETE" method="POST">
+  <button type="submit" >Logout</button>
+</form>
+
+<a href="/register">Register new account</a>
+<br>
+
+
+<br>
+<div>
+  <label>Promijeni trajanje svih bonova:</label>
+  <select name="cars" id="cars">
+    <option value=30>30</option>
+    <option value=60>60</option>
+    <option value=90>90</option>
+  </select>
+  <button>Promijeni</button>
+</div>
+<div>
+  <label>Promijeni broj generacija bonova za sve:</label>
+  <input>
+  <button>Promijeni</button>
+</div>
+
+<div>
+  <label >Pronađi korisnika s </label>
+  <select name="cars" id="cars">
+    <option value=30>emailom</option>
+    <option value=60>imenom</option>
+    <option value=90>id</option>
+  </select>
+  <label >:</label>
+  <input>
+  <button>Search</button>
+</div>
+
+<br>
+<label>Prikaz zadnjih 50 korisnika</label>
+<table  style="width:100% ;border:1px solid black">
+    <tr >
+      <th>Id</th><th>Name</th><th>Email</th><th>Racun</th><th>Broj pokusaja</th><th>Edit</th><th>Detalji</th>
+    </tr>
+  
+<% for (var i = 0; i < users.length; i++) { if(users[i].role == 'admin') {continue; } %>
+      <tr>
+        <td><%= users[i].id %></td>
+        <td><%= users[i].name %></td>
+        <td><%= users[i].email %></td>
+        <td><%= users[i].balance %>kn</td>
+        <td><%= users[i].genCount %></td>
+        <td><a href=<%="./register/" + users[i].id %> >Edit</a></td>
+        <td><a href=<%="./users/" + users[i].id %> >Detalji</a></td>
+
+      </tr>    
+    <% } %>
+  </table>

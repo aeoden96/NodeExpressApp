@@ -1,4 +1,19 @@
-GET http://localhost:3000/users
+GET http://localhost:3000/admin
+Content-Type: application/json
+
+{
+    "userId":2
+}
+
+###
+
+
+GET http://localhost:3000/dashboard
+Content-Type: application/json
+
+{
+    "userId":1
+}
 
 ###
 

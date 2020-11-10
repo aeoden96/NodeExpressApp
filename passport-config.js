@@ -1,5 +1,6 @@
 const LocalStrategy = require('passport-local').Strategy
 const bcrypt = require('bcrypt')
+const { ROLE } = require('./data')
 
 function initialize(passport, getUserByEmail, getUserById) {
   const authenticateUser = async (email, password, done) => {
@@ -8,6 +9,16 @@ function initialize(passport, getUserByEmail, getUserById) {
     if (user == null) {
       return done(null, false, { message: 'No user with that email' })
     }
+/*
+    //NEED TO REMOVE
+    if(user.role == ROLE.ADMIN){
+      return done(null, user)
+    }
+    //NEED TO REMOVE/*
+    if(user.role == ROLE.BASIC){
+      return done(null, user)
+    }*/
+    ////////////////////////
 
     try {
       if (await bcrypt.compare(password, user.password)) {
