@@ -1,7 +1,9 @@
+<link rel="stylesheet" type="text/css" href="/css/style.css" />
+
 <% if('undefined' !== typeof user ) {var isD= true;} %>
 <% var sty= "style='display:none'" %>
 
-<h1>Register <%=isD?user.name: '' %></h1>
+<h1><%=isD?'Edit user: ' + user.name: 'Register new user' %></h1>
 
 <form action=<%=isD ? "/register/" + user.id : '/register' %> method="POST">
 <div <%=isD? '': 'hidden' %> >
@@ -22,6 +24,11 @@
 <div  <%=isD ? "hidden" : "" %> >
     <label for= "password">Password</label>
     <input type="password" id="password" name ="password"  <%=isD ? 'disabled' : '' %>>
+
+</div>
+<div  <%=isD ? "" : "hidden" %> >
+    <label for= "password">Generation count</label>
+    <input type="number" id="genCount" name ="genCount"  <%=isD ? '' : 'disabled' %>  value= <%=isD?user.genCount: '' %>  >
 
 </div>
 <button type="submit">Register</button>

@@ -1,47 +1,85 @@
+<link rel="stylesheet" type="text/css" href="/css/styleTable.css" />
 
 
-<h2>ADMIN PAGE</h2> <h3>Admin: <%=currentUser['name'] %>  </h3> 
 
-<form action="/logout?_method=DELETE" method="POST">
-  <button type="submit" >Logout</button>
-</form>
-
-<a href="/register">Register new account</a><br>
-<a href="/log">Lookup log file</a>
-<br>
-
-
-<br>
-<div>
-  <label>Promijeni trajanje svih bonova:</label>
-  <select name="cars" id="cars">
-    <option value=30>30</option>
-    <option value=60>60</option>
-    <option value=90>90</option>
-  </select>
-  <button>Promijeni</button>
-</div>
-<div>
-  <label>Promijeni broj generacija bonova za sve:</label>
-  <input>
-  <button>Promijeni</button>
+<div class="leftPane pane">
+  <h3>ADMIN PAGE</h3> <h3>Admin: <%=currentUser['name'] %>  </h3> 
+  <form action="/logout?_method=DELETE" method="POST">
+    <button type="submit" >Logout</button>
+  </form>
+  <button  onclick='window.location="/admin/refreshActivities"''>CronJob Osvježi aktivnosti 🗘</button><br>
+  <a href="/register">Register new account</a><br>
+  <a href="/log">Lookup log file</a>
 </div>
 
-<form action="/admin/search" method="POST">
-  <label >Pronađi korisnika s </label>
-  <select name="selection" id="selection">
-    <option value='email'>emailom</option>
-    <option value='name'>imenom</option>
-    <option value='id'>id</option>
-  </select>
-  <label >:</label>
-  <input name="input" id="input">
-  <button type="submit">Search</button>
-</form>
-
 <br>
-<label>Prikaz zadnjih n korisnika</label>
-<table  style="width:100% ;border:1px solid black">
+
+
+<table class="rightTable">
+  <tr >
+    <form action="/admin/change/passive" method="POST">
+    <td>
+      <label>Promijeni pasivno vrijeme:</label>
+      <select name="select1" id="select1">
+        <option value="all">za sve</option>
+        <option value="new">za nove</option>
+      </select>
+      <select name="select2" id="select2">
+        <option value=30>30</option>
+        <option value=60>60</option>
+      </select>
+    </td>
+
+      
+      <td>
+        <button type="submit" class="rightButton">Promijeni</button>
+      </td>
+    </form>
+
+  </tr>
+  <tr >
+    <form action="/admin/change/active" method="POST">
+    <td>
+      
+      <label>Promijeni aktivno vrijeme:</label>
+      <select name="select1" id="select3">
+        <option value="all">za sve</option>
+        <option value="new">za nove</option>
+      </select>
+      <select name="select2" id="select4">
+        <option value=30>30</option>
+        <option value=60>60</option>
+      </select>
+    </td>
+    <td>
+      <button type="submit" class="rightButton">Promijeni</button>
+    </td>
+    </form>
+  </tr>
+  <tr >
+    <form action="/admin/search" method="POST">
+    <td>
+      <label >Pronađi korisnika s </label>
+        <select name="selection" id="selection">
+          <option value='email'>emailom</option>
+          <option value='name'>imenom</option>
+          <option value='id'>id</option>
+        </select>
+        <label >:</label>
+        <input name="input" id="input">
+    </td>
+    <td>
+      <button type="submit" class="rightButton">Search</button>
+    </td>
+        
+        
+      </form>
+      
+  </tr>
+</table>
+
+
+<table  >
     <tr >
       <th>Id</th><th>Name</th><th>Email</th><th>Racun</th><th>Broj pokusaja</th><th>Edit</th><th>Detalji</th>
     </tr>

@@ -11,7 +11,7 @@
     
 <table style="width:100% ;border:1px solid black">
     <tr>
-      <th>Bon ID</th><th>Datum generiranja</th><th>Datum akt</th><th>Trajanje</th><th>Vrijednost</th><th>Active</th>
+      <th>Bon ID</th><th>Datum generiranja</th><th>Datum akt</th><th>Akt vrijeme</th><th>Pas vrijeme</th><th>Vrijednost</th><th>Active</th>
     </tr>
   
 <% for (var i = 0; i < bonovi.length; i++) {  %>
@@ -20,6 +20,7 @@
         <td><%= bonovi[i].genDate %></td>
         <td><%= bonovi[i].actDate %></td>
         <td><%= bonovi[i].duration %></td>
+        <td><%= bonovi[i].passiveTime %></td>
         <td><%= bonovi[i].value %>kn</td>
         <td><p><%= (i== activeIndex)? 'AKTIVAN' : 'NIJE AKTIVAN' %></p></td>
       </tr>    

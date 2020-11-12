@@ -1,7 +1,10 @@
+<link rel="stylesheet" type="text/css" href="/css/styleTable.css" />
+
 <form action="/logout?_method=DELETE" method="POST">
     <button type="submit" >Logout</button>
 </form>
 <div>
+  <h2 <%=errors=='' ? "hidden": "" %> style="border:3px; border-style:solid; border-color:#FF0000; padding: 1em;"><%=errors %></h2>
   <h2>Aktivnost:   <%=isActive %></h2>
     <h2>Račun:   <%=currentUser['balance'] %>kn</h2>
     <h2>Today date: <%=todayDate.toLocaleDateString('hr-HR') %></h2>
