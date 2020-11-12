@@ -24,7 +24,7 @@ module.exports={
         {id: 156123161655, genDate: new Date(2020, 08, 5 ),     ownerId: 686864 , value:60  ,duration:60 ,passiveTime: 60              },
         {id: 156123161656, genDate: new Date(2020, 09, 15 ),    ownerId: 686864 , value:30  ,duration:30   ,passiveTime: 60            },
         {id: 156123161657, genDate: new Date(2020, 11, 24) ,    ownerId: 668646 ,value:60 ,duration:30  ,passiveTime: 60              },
-        {id: 156123161658, genDate: new Date(2020, 10, 2 ),     ownerId: 160502,  value:30,   duration:30,passiveTime: 60                  }
+        {id: 156123161658, genDate: new Date(2020, 09, 1),   actDate:new Date(2020, 09, 5) , ownerId: 160502,  value:30,   duration:60,passiveTime: 60                  }
     ],
     log: [
         {id: 12345, date: Date(2020, 11, 5 ),action:ACTION.LOGIN , info: "FIRST TEST LOG"},

@@ -13,6 +13,9 @@ if (process.env.NODE_ENV !== 'production') {
   const methodOverride = require('method-override')
   //from role-tut
   const {authUser,alreadyAuth,authRole,checkAuthenticated,checkNotAuthenticated }= require("./basicAuth")
+  const {ScheduledActivityCheck }= require("./scheduledFunctions")
+  const {addToLog,pronadiIndexOdBona,pronadiIndexUsera,pronadiBonovePoId,vratiAktivnost ,generateANumber}= require("./helpFunctions")
+
   const {ROLE,ACTION,users,bon,log,global_settings}= require("./data")
   const initializePassport = require('./passport-config')
 
@@ -64,28 +67,6 @@ if (process.env.NODE_ENV !== 'production') {
     return res.redirect('/dashboard?gen=success');
   })
 
-  function generateANumber(){
-    tempNum=0
-    lookingForNum=true
-    while(lookingForNum) {
-      tempNum=Math.floor(Math.random()*1e10).toString();
-      
-      if(tempNum.toString().length < 10) continue
-
-      foundMatch=false
-      bon.forEach(element => {
-        if(element.id ==tempNum){
-          foundMatch=true
-        }
-      })
-
-      if(foundMatch) continue
-      lookingForNum=false
-    }
-    return tempNum
-  }
-
-
   app.post('/activate/:id',authUser,authRole(ROLE.BASIC) ,(req, res) => {
     var info= vratiAktivnost(req.user.id)
     var userInd= pronadiIndexUsera(req.user.id)
@@ -107,9 +88,8 @@ if (process.env.NODE_ENV !== 'production') {
   })
 
 
-
   app.get('/dashboard',authUser,authRole(ROLE.BASIC) ,(req, res) => {
-    //res.send('Dashboard Page')
+    
     var info= vratiAktivnost(req.user.id)
 
      
@@ -170,7 +150,7 @@ if (process.env.NODE_ENV !== 'production') {
 
     }
     res.render('dashboard.ejs',temp )
-    //res.send(errors)
+    //return res.send(info[3].toString())
     
   })
 
@@ -249,11 +229,11 @@ if (process.env.NODE_ENV !== 'production') {
     return res.redirect('/admin/')
   })
 
-  app.get('/users', (req, res) => {
+  app.get('/users',authUser,authRole(ROLE.ADMIN), (req, res) => {
     res.send(users)
   })
 
-  app.get('/users/:id', (req, res) => {
+  app.get('/users/:id',authUser,authRole(ROLE.ADMIN), (req, res) => {
     var info= vratiAktivnost(req.params.id)
 
     var bonoviZaIspis= info[0].map(temp=> {
@@ -279,109 +259,6 @@ if (process.env.NODE_ENV !== 'production') {
     res.render('login.ejs')
   })
 
-  function ScheduledActivityCheck(){
-    
-    var datetime=new Date()
-    addToLog(null,datetime,null,"ACTIVITIES REFRESHED")
-    pobrisiBon=false
-    while(true){
-      i=0
-      pobrisiBon=false
-
-      for(i=0;i<bon.length;i++)
-      {
-        if(bon[i].actDate ==null){
-          diffDays2 = Math.ceil((datetime -bon[i].genDate ) / (1000 * 60 * 60 * 24));
-          if(diffDays2 > bon[i].passiveTime )
-          {
-            //proslo passiveTime
-            pobrisiBon=true;
-            break;
-          }  
-        }
-        diffDays = Math.ceil((bon[i].actDate- datetime ) / (1000 * 60 * 60 * 24));
-        if(diffDays > bon[i].duration )
-        {
-          //proslo activeTime
-          pobrisiBon=true;
-          return [i,pobrisiBon,"istekao akt"]
-          break;
-        }
-
-        
-
-      }
-
-      
-      if(pobrisiBon){
-        bon.splice(i, 1);
-      }
-      else{
-        break;
-      }
-
-
-    }
-  }
-  function vratiAktivnost(userId){
-    const bonovi= pronadiBonovePoId(userId)
-    var datetime=new Date()
-    isActiveVar=null
-    isActive=false
-    diff=0
-    var i=0;
-
-    for( i=0; i< bonovi.length ;i++)
-    {
-      if(bonovi[i].actDate ==null){
-        diffDays2 = Math.ceil((datetime -bonovi[i].genDate ) / (1000 * 60 * 60 * 24));
-        if(diffDays2 <= bonovi[i].passiveTime )
-        {
-          //bon se jos stigne aktivirat
-        }
-        else{
-          //bon se vise nesmije moc aktivirat
-          continue;
-        }
-      }
-      diffDays = Math.ceil((bonovi[i].actDate- datetime ) / (1000 * 60 * 60 * 24));
-      if(diffDays < 0){
-        //greska ,aktDate je prije datetime
-      }
-      if(diffDays <= bonovi[i].duration )
-      {
-        isActive=true
-        diff=bonovi[i].duration - diffDays
-        break;
-      }
-      else{
-        //diff=bonovi[i].duration - diffDays
-      }
-    }
-    
-    if(isActive)
-      return [bonovi,isActive,i,diff]
-    else
-      return [bonovi,isActive,-1,diff]
-  }
-
-
-
-  function pronadiIndexOdBona(bonId){
-    const indexLogic = (element) => element.id == bonId;
-    const i= bon.findIndex(indexLogic)
-    return i
-  }
-  function pronadiIndexUsera(userId) {
-    const indexLogic = (element) => element.id == userId;
-    const i= users.findIndex(indexLogic)
-    return i
-  }
-
-  function pronadiBonovePoId(userId){
-    return bon.filter(bon => bon.ownerId == userId)
-  }
-
   app.post('/login', function(req, res, next) {
     passport.authenticate('local', function(err, user, info) {
       if (err) { return next(err); }
@@ -404,11 +281,11 @@ if (process.env.NODE_ENV !== 'production') {
     })(req, res, next);
   });
 
-  app.get('/register'/*,authUser,authRole(ROLE.ADMIN)*/, (req, res) => {
+  app.get('/register',authUser,authRole(ROLE.ADMIN), (req, res) => {
     res.render('register.ejs')
   })
 
-  app.get('/register/:id',/*authUser,authRole(ROLE.ADMIN),*/ (req, res) => {
+  app.get('/register/:id',authUser,authRole(ROLE.ADMIN), (req, res) => {
     //res.send(users[0])
     const tempUser= users.filter(user => user.id==req.params.id )
     res.render('register.ejs',{user:tempUser[0]})
@@ -416,7 +293,7 @@ if (process.env.NODE_ENV !== 'production') {
   })
 
   //AKO ULOG =>  OK
-  app.post('/register'/*,authUser,authRole(ROLE.ADMIN),*/,async (req, res) => {
+  app.post('/register',authUser,authRole(ROLE.ADMIN),async (req, res) => {
     try {
 
       var filUsers=users.filter(user => user.email == req.params.email)
@@ -443,9 +320,10 @@ if (process.env.NODE_ENV !== 'production') {
     }
   })
 
-  app.post('/register/:id',/*authUser,authRole(ROLE.ADMIN),*/ (req, res) => {
+  app.post('/register/:id',authUser,authRole(ROLE.ADMIN), (req, res) => {
     var i= pronadiIndexUsera(req.body.oldId)
     users[i].name=req.body.name;
+    users[i].email=req.body.email;
     users[i].genCount=req.body.genCount;
 
     //res.send(i.toString())
@@ -469,13 +347,8 @@ if (process.env.NODE_ENV !== 'production') {
     next()
   }
 
-  function addToLog(userId,date, action, role ,message){
-    log.push({
-      id: userId, date: date,action:action,role: role,message:message
-    })
-  }
 
- 
+
 const port = process.env.PORT || 3000;
 
   app.listen(port,function (){
