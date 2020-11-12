@@ -4,9 +4,9 @@
 <h1>Register <%=isD?user.name: '' %></h1>
 
 <form action=<%=isD ? "/register/" + user.id : '/register' %> method="POST">
-<div  <%=isD ? " " : sty %> >
+<div <%=isD? '': 'hidden' %> >
     <label for= "oldId">Id</label >
-    <input readonly="readonly" type="text" id="oldId" name ="oldId" value= <%=isD?user.id: '' %> >
+    <input readonly="readonly" type="text" id="oldId" name ="oldId" value= <%=isD?user.id: 'auto_value' %> >
 
 </div>
 <div>
@@ -19,9 +19,9 @@
     <input type="email" id="email" name ="email" required value= <%=isD?user.email: '' %> >
 
 </div>
-<div>
+<div  <%=isD ? "hidden" : "" %> >
     <label for= "password">Password</label>
-    <input type="password" id="password" name ="password" required <%=isD ? 'disabled' : '' %>>
+    <input type="password" id="password" name ="password"  <%=isD ? 'disabled' : '' %>>
 
 </div>
 <button type="submit">Register</button>

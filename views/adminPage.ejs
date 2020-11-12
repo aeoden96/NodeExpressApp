@@ -6,7 +6,8 @@
   <button type="submit" >Logout</button>
 </form>
 
-<a href="/register">Register new account</a>
+<a href="/register">Register new account</a><br>
+<a href="/log">Lookup log file</a>
 <br>
 
 
@@ -26,20 +27,20 @@
   <button>Promijeni</button>
 </div>
 
-<div>
+<form action="/admin/search" method="POST">
   <label >Pronađi korisnika s </label>
-  <select name="cars" id="cars">
-    <option value=30>emailom</option>
-    <option value=60>imenom</option>
-    <option value=90>id</option>
+  <select name="selection" id="selection">
+    <option value='email'>emailom</option>
+    <option value='name'>imenom</option>
+    <option value='id'>id</option>
   </select>
   <label >:</label>
-  <input>
-  <button>Search</button>
-</div>
+  <input name="input" id="input">
+  <button type="submit">Search</button>
+</form>
 
 <br>
-<label>Prikaz zadnjih 50 korisnika</label>
+<label>Prikaz zadnjih n korisnika</label>
 <table  style="width:100% ;border:1px solid black">
     <tr >
       <th>Id</th><th>Name</th><th>Email</th><th>Racun</th><th>Broj pokusaja</th><th>Edit</th><th>Detalji</th>
@@ -52,9 +53,8 @@
         <td><%= users[i].email %></td>
         <td><%= users[i].balance %>kn</td>
         <td><%= users[i].genCount %></td>
-        <td><a href=<%="./register/" + users[i].id %> >Edit</a></td>
-        <td><a href=<%="./users/" + users[i].id %> >Detalji</a></td>
+        <td><a href=<%="../register/" + users[i].id %> >Edit</a></td>
+        <td><a href=<%="../users/" + users[i].id %> >Detalji</a></td>
 
       </tr>    
-    <% } %>
-  </table>
+    <% } %></table>

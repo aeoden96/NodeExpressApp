@@ -1,28 +1,38 @@
 <form action="/logout?_method=DELETE" method="POST">
     <button type="submit" >Logout</button>
 </form>
-<%=currentUser['password'] %>
 <div>
+  <h2>Aktivnost:   <%=isActive %></h2>
     <h2>Račun:   <%=currentUser['balance'] %>kn</h2>
-    <h2>Today date: <%=todayDate.toISOString().slice(0,10) %></h2>
-    <h2>Valjanost:<b style="color:green">AKTIVAN</b> do datum(<%= razlika %>)</h2>  
+    <h2>Today date: <%=todayDate.toLocaleDateString('hr-HR') %></h2>
+    <h2>Valjanost:<b style="color:blue"><%=isActive? 'AKTIVAN' : 'NEAKTIVAN' %></b> do datuma <%=aktExp %> (preostalo dana <%=aktTime %>)</h2>  
     
 
     
 <table style="width:100% ;border:1px solid black">
     <tr>
-      <th>Bon ID</th><th>Datum generiranja</th><th>Aktivan</th><th>Aktiviraj</th>
+      <th>Bon ID</th><th>Datum generiranja</th><th>Datum akt</th><th>Trajanje</th><th>Vrijednost</th><th>Aktiviraj</th>
     </tr>
   
 <% for (var i = 0; i < bonovi.length; i++) {  %>
-      <tr>
+      <tr <%= (isActive && (i== activeIndex))? 'style="background:blue"' : ' ' %>>
         <td><%= bonovi[i].id %></td>
         <td><%= bonovi[i].genDate %></td>
-        <td><%= bonovi[i].active %></td>
-        <td><button>Aktiviraj Bon</button></td>
+        <td><%= bonovi[i].actDate %></td>
+        <td><%= bonovi[i].duration %></td>
+        <td><%= bonovi[i].value %>kn</td>
+
+        <td>
+          <form action=<%='./activate/' + bonovi[i].id %> method="POST">
+            <button   <%= (i== activeIndex)? 'disabled' : ' ' %> type="submit"><%= (i== activeIndex)? 'AKTIVAN' : 'Aktiviraj' %></button>
+          </form>
+        </td>
       </tr>    
     <% } %>
   </table>
-    <h2>Generiraj novi BON: </h2> <button disabled>GENERIRAJ NOVI (preostalo 0)</button> 
-    <h2>Preostali broj bonova koje smijem generirati:   <%=currentUser['genCount'] %></h2> 
-  </div>
+
+  <form action='./generate' method="POST">
+    <h2>Generiraj novi BON: </h2> <button type="submit" >GENERIRAJ NOVI (preostalo <%=currentUser['genCount'] %>)</button> 
+  </form>
+  
+</div>

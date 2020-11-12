@@ -1,8 +1,29 @@
-<h2>User : Sally</h2>
+<h2>Trenutni bonovi za usera : </h2>
+<div>
+    <p>Ime: <%=user.name%></p>
+    <p>Email: <%=user.email%></p>
+    <p>Broj ostalih generacija bonova: <%=user.genCount%></p>
+    <p>Racun: <%=user.balance%>kn</p>
+    <p>Aktivnost:   <%=isActive %></p>
+</div>
+ 
 
+    
+<table style="width:100% ;border:1px solid black">
+    <tr>
+      <th>Bon ID</th><th>Datum generiranja</th><th>Datum akt</th><th>Trajanje</th><th>Vrijednost</th><th>Active</th>
+    </tr>
+  
+<% for (var i = 0; i < bonovi.length; i++) {  %>
+      <tr <%= (isActive && (i== activeIndex))? 'style="background:blue"' : ' ' %>>
+        <td><%= bonovi[i].id %></td>
+        <td><%= bonovi[i].genDate %></td>
+        <td><%= bonovi[i].actDate %></td>
+        <td><%= bonovi[i].duration %></td>
+        <td><%= bonovi[i].value %>kn</td>
+        <td><p><%= (i== activeIndex)? 'AKTIVAN' : 'NIJE AKTIVAN' %></p></td>
+      </tr>    
+    <% } %>
+  </table>
 
-<h2>Trenutni bonovi</h2>
-<table>
-
-
-</table>
+  <a href="/admin">Return to admin panel</a>
