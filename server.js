@@ -4,6 +4,7 @@ if (process.env.NODE_ENV !== 'production') {
   
   const express = require('express')
   const app = express()
+  const mongoose = require('mongoose');
   //from auth-tut
   const bcrypt = require('bcrypt')
   const passport = require('passport')
@@ -35,6 +36,10 @@ if (process.env.NODE_ENV !== 'production') {
   app.use(passport.session())
   app.use(methodOverride('_method'))
   
+
+  
+
+
 
   //AKO ULOG =>  OK
   app.get('/', (req, res) => {
@@ -334,5 +339,8 @@ if (process.env.NODE_ENV !== 'production') {
   }
 
  
+const port = process.env.PORT || 3000;
 
-  app.listen(3000)
+  app.listen(port,function (){
+    console.log("Server started!")
+  })
